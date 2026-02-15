@@ -7,26 +7,25 @@ import {
   deleteTask,
 } from "../controllers/taskController.js";
 import validator from "../middlewares/validator.js";
-import {
-  createTaskSchema,
-  updateTaskSchema,
-} from "../validators/taskValidator.js";
+import { createTaskSchema, updateTaskSchema } from "../validators/taskValidator.js";
 import { requireAuth } from "../middlewares/auth.js";
-import { authorizeRoles } from "../middlewares/role.js";
 import { checkTaskOwnership } from "../middlewares/ownership.js";
 
 const router = express.Router();
 
-router.post("/",requireAuth, validator(createTaskSchema), createTask);
+// Create a new task
+router.post("/", requireAuth, validator(createTaskSchema), createTask);
+
+// Get all tasks
 router.get("/", requireAuth, getAllTasks);
+
+// Get a task by ID
 router.get("/:id", requireAuth, getTaskById);
-router.put(
-  "/:id",
-  requireAuth,
-  checkTaskOwnership,
-  validator(updateTaskSchema),
-  updateTask,
-);
+
+// Update a task
+router.put("/:id", requireAuth, checkTaskOwnership, validator(updateTaskSchema), updateTask);
+
+// Delete a task
 router.delete("/:id", requireAuth, checkTaskOwnership, deleteTask);
 
 export default router;
